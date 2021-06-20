@@ -6,6 +6,7 @@ import com.springb.test.Model.Books;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,10 @@ public class Bookservice {
     @Autowired
     private BookRepositry bookRepositry;
 
+    @Autowired
+
+    private AnalyticsService analyticsService;
+
    /*private List<Books> books= new ArrayList<Books>(Arrays.asList(
             new Books(1,"comic",100),
             new Books(2,"mythology",200)
@@ -26,25 +31,40 @@ public class Bookservice {
    public List<Books> getallBooks()
    {
        //return books;
-       List<Books> allbooks =new ArrayList<>();
+     //  List<Books> allbooks =new ArrayList<>();
 
-       bookRepositry.findAll().forEach(allbooks ::add);
-       return allbooks;
+      // bookRepositry.findAll().forEach(allbooks ::add);
+      // return allbooks;
 
+       return bookRepositry.findAll();
    }
 
    public Optional<Books> getBook(Integer id)
    {
       // return books.stream().filter( t -> t.getBooktype().equals(type)).findFirst().get();
+
+
+
+       Optional<Books> analytics= bookRepositry.findById(id);
+      int aId=analytics.get().getId();
+      String aType=analytics.get().getBooktype();
+      int aCost=analytics.get().getBookcost();
+
+     // System.out.println(aId +" "+aType+" "+aCost);
+       analyticsService.analyseandupdate(aId,aType,aCost);
+
+
+
       return bookRepositry.findById(id);
    }
 
-   public void addBook( Books book)
+   public void addBook( List<Books> books)
    {
       // books.add(book);
+      bookRepositry.saveAll(books);
 
-       bookRepositry.save(book);
-   }
+      }
+
 
 
    public void updateBook(String type,Books newbook)
@@ -60,7 +80,6 @@ public class Bookservice {
        }*/
 
      bookRepositry.save(newbook);
-
 
    }
     public void deleteBook(Integer id)

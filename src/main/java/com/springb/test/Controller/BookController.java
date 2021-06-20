@@ -3,6 +3,7 @@ package com.springb.test.Controller;
 
 import com.springb.test.Model.BookRepositry;
 import com.springb.test.Model.Books;
+import com.springb.test.service.AnalyticsService;
 import com.springb.test.service.Bookservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,9 @@ public class BookController {
     @Autowired
     private Bookservice bookservice;
 
+    @Autowired
+    private AnalyticsService analyticsService;
+
     @GetMapping("/books")
     public List<Books> getallBooks()
     {
@@ -27,20 +31,30 @@ public class BookController {
         return bookservice.getallBooks();
     }
 
+    @GetMapping("/testing")
+    public String  fun()
+    {
+        return "heloo its working";
+    }
+
 
 
     @GetMapping("/books/{id}") //using curly braces is a way of giving the type as a variable
     public Optional<Books> getBook(@PathVariable Integer id)
     {
+
+
        return bookservice.getBook(id);
 
 
     }
 
+
+
     //@RequestMapping(method = RequestMethod.POST,value = "/books")
     @PostMapping("/books")
 
-    public void addBook(@RequestBody Books book)
+    public void addBook(@RequestBody List<Books> book)
     {
          bookservice.addBook(book);
     }
